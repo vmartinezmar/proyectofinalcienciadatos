@@ -20,8 +20,8 @@ response = requests.get(url, timeout=10)
 
 # Asegurarse de que la solicitud es exitosa
 if response.status_code == 200:
-    # Cargar el modelo con joblib del archivo descargado
-    model = joblib.load(BytesIO(response.content))
+    # Cargar el modelo con pycaret del archivo descargado
+    model = load_model(BytesIO(response.content))
 else:
     print('Error al descargar el archivo:', response.status_code)
 
@@ -79,11 +79,10 @@ if st.button('Predecir'):
         })
     
         # Realizar la predicción
-        #prediction = predict_model(model, data=input_data)
-        prediction = model.predict(input_data)
+        prediction = predict_model(model, data=input_data)
 
         # Extraer la predicción
-        predicted_price = prediction[0]
+        predicted_price = prediction.iloc[0]['prediction_label']
 
         # Mostrar el resultado
         st.write(f'**El precio estimado de la vivienda es: ```{predicted_price:,.2f} €```**')
